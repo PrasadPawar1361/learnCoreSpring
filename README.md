@@ -100,4 +100,76 @@ Prototype	Spring creates a brand new instance every single time you ask the cont
 2. You tell Spring where to look using @ComponentScan.
 3. The ApplicationContext (IoC Container) starts up, scans your packages, and creates the objects (Beans).
 4. Wherever Spring finds @Autowired, it automatically wires the dependent Beans together (Dependency Injection).
+
+
+***********************************************************************************************************
+
+
+1. Singleton Scope (Default)
+
+• Simple Explanation: Spring creates only one single object of the class for the entire project. Everyone shares the exact same instance in memory.
+• Basic Example: Think of a Classroom Whiteboard. There is only one board in the room. All students look at and share the same board.
+• Code:
+java
+@Component
+// By default, it is @Scope("singleton")
+public class Whiteboard {
+// Shared by everyone
+}
+
+
+2. Prototype Scope
+
+• Simple Explanation: Spring creates a brand-new object every single time you ask for it or inject it.
+• Basic Example: Think of a Student Notebook. Every student gets their own personal, separate notebook.
+• Code:
+java
+@Component
+@Scope("prototype") // Tells Spring to make a new object every time
+public class Notebook {
+// Private to whoever asks for it
+}
+
+
+3. @PostConstruct & @PreDestroy (Lifecycle Hooks)
+
+• Simple Explanation:
+• @PostConstruct runs code automatically right after the object is born (initialized).
+• @PreDestroy runs code automatically right before the object dies (destroyed at application shutdown).
+• Basic Example: Starting and stopping a machine.
+• Code:
+java
+@Component
+public class DatabaseMachine {
+
+    @PostConstruct
+    public void start() {
+        System.out.println("🔌 Connected to Database (Object is Born!)");
+    }
+
+    @PreDestroy
+    public void stop() {
+        System.out.println("❌ Disconnected cleanly (Object is dying...)");
+    }
+}
+
+
+4. @Qualifier
+
+• Simple Explanation: Used when Spring gets confused. If you have two different classes implementing the same interface, @Qualifier tells Spring exactly which class object you want to use.
+• Basic Example: If you ask for a "Payment", Spring asks: "UPI or Card?". You use @Qualifier to say "Give me UPI".
+• Code:
+java
+@Component
+public class Checkout {
+
+    @Autowired
+    @Qualifier("upiPayment") // Directs Spring to choose the UPI object specifically
+    private PaymentType payment; 
+} 
+
+
+
+
 </b>
+
